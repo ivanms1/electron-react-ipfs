@@ -81,15 +81,12 @@
   },
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "asar": true
+      },
       "makers": [
         {
-          "name": "@electron-forge/maker-wix",
-          "config": {
-            "ui": {
-              "chooseDirectory": true
-            }
-          }
+          "name": "@electron-forge/maker-squirrel"
         },
         {
           "name": "@electron-forge/maker-zip",
