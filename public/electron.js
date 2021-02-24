@@ -1,14 +1,8 @@
 const path = require("path");
-const fs = require("fs");
-const { app, BrowserWindow, ipcMain } = require("electron");
-const IPFS = require("ipfs-core");
-const Protector = require("libp2p/src/pnet");
+const { app, BrowserWindow } = require("electron");
 const isDev = require("electron-is-dev");
 
-let node;
-
-const BOOTSTRAP_ADDRESSS =
-  "/ip4/15.164.229.6/tcp/4001/ipfs/12D3KooWNubmXubMPzPY9B69HLAEpoRBS41MchdGCa9SgJtd5LnT";
+require("./ipcMain/ipfs");
 
 let installExtension, REACT_DEVELOPER_TOOLS;
 
@@ -25,8 +19,8 @@ if (require("electron-squirrel-startup")) {
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 800,
     webPreferences: {
       nodeIntegration: true,
     },
@@ -86,37 +80,5 @@ app.on("activate", () => {
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
-  }
-});
-
-ipcMain.handle("connect-to-ipfs", async () => {
-  console.log(__dirname, "dir");
-  try {
-    node = await IPFS.create({
-      libp2p: {
-        modules: {
-          connProtector: new Protector(
-            fs.readFileSync(__dirname + "/swarm.key")
-          ),
-        },
-      },
-      config: {
-        Bootstrap: [BOOTSTRAP_ADDRESSS],
-      },
-    });
-
-    const version = await node.version();
-    const id = await node.id();
-
-    return {
-      success: true,
-      version,
-      id,
-    };
-  } catch (error) {
-    return {
-      success: false,
-      error,
-    };
   }
 });

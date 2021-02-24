@@ -21,6 +21,7 @@
     "electron-squirrel-startup": "^1.0.0",
     "framer-motion": "^3.6.7",
     "ipfs-core": "^0.5.2",
+    "jimp": "^0.16.1",
     "react": "^17.0.1",
     "react-click-away-listener": "^2.0.0",
     "react-dom": "^17.0.1",

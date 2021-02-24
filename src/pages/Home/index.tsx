@@ -1,7 +1,6 @@
 import { Button, HStack, Stack, Text } from "@chakra-ui/react";
 import { AnimatePresence, AnimateSharedLayout, motion } from "framer-motion";
 import { useMutation } from "react-query";
-import ClickAwayListener from "react-click-away-listener";
 
 import React, { useState } from "react";
 
@@ -75,12 +74,7 @@ function Home() {
 
       <AnimatePresence>
         {selectPage && (
-          <ClickAwayListener onClickAway={() => setSelectPage("")}>
-            <Component
-              layoutId={selectPage}
-              onClose={() => setSelectPage("")}
-            />
-          </ClickAwayListener>
+          <Component layoutId={selectPage} onClose={() => setSelectPage("")} />
         )}
       </AnimatePresence>
     </AnimateSharedLayout>

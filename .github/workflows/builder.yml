@@ -17,9 +17,6 @@ jobs:
         with:
           node-version: 15.x
       - run: |
-          sudo apt-get update -y
-          sudo apt-get install -y dpkg fakeroot
-          sudo apt-get install libsecret-1-dev
           yarn install
           yarn make
       - name: Upload Executable
