@@ -11,6 +11,9 @@
 # production
 /build
 
+# Electron-Forge
+out/
+
 # misc
 .DS_Store
 .env.local
