@@ -82,9 +82,11 @@
       "packagerConfig": {},
       "makers": [
         {
-          "name": "@electron-forge/maker-squirrel",
+          "name": "@electron-forge/maker-wix",
           "config": {
-            "name": "react_electron_forge"
+            "ui": {
+              "chooseDirectory": true
+            }
           }
         },
         {
