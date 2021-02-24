@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "main": "public/electron.js",
+  "description": "Conun IPFS Client",
   "homepage": "./",
+  "license": "MIT",
   "dependencies": {
     "@chakra-ui/react": "^1.3.3",
     "@emotion/react": "^11.1.5",

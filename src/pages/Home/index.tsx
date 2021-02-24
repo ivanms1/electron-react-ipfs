@@ -1,6 +1,6 @@
 import { Button, HStack, Stack, Text } from "@chakra-ui/react";
 import { AnimatePresence, AnimateSharedLayout, motion } from "framer-motion";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import ClickAwayListener from "react-click-away-listener";
 
 import React, { useState } from "react";

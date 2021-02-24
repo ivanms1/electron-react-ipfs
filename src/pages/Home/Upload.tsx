@@ -1,14 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { useMutation } from "react-query";
 import {
   Button,
-  HStack,
-  Spinner,
   Stack,
   Text,
   useToast,
   Image,
-  Input,
   Textarea,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
