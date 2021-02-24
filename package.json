@@ -4,6 +4,10 @@
   "private": true,
   "main": "public/electron.js",
   "description": "Conun IPFS Client",
+  "author": {
+    "name": "CONUN Foundation",
+    "url": "https://www.conun.io/"
+  },
   "homepage": "./",
   "license": "MIT",
   "dependencies": {
