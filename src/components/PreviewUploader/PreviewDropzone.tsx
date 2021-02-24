@@ -14,8 +14,6 @@ function PreviewDropzone({ onDrop }: DropzoneProps) {
   // @ts-ignore
   const pathName = acceptedFiles?.[0]?.path ?? "";
 
-  console.log(pathName, acceptedFiles);
-
   return (
     <Stack
       justifyContent="center"
