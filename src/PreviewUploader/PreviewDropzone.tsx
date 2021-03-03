@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Stack, Image, Text } from "@chakra-ui/react";
 import { useDropzone } from "react-dropzone";
 
@@ -33,8 +33,8 @@ function PreviewDropzone({ onDrop }: DropzoneProps) {
           src={URL.createObjectURL(acceptedFile)}
           marginTop="0  !important"
           width="500px"
-          height="250px"
-          objectFit="cover"
+          maxHeight="250px"
+          objectFit="contain"
           alt="folder"
         />
       ) : (

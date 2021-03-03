@@ -1,25 +1,28 @@
 import React from "react";
 import { useMutation } from "react-query";
-import {
-  Button,
-  Stack,
-  Text,
-  useToast,
-  Image,
-  Textarea,
-} from "@chakra-ui/react";
+import { Button, Stack, Text, useToast, Textarea } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { Controller, useForm } from "react-hook-form";
 
 import Dropzone from "../../components/Dropzone";
+import Input from "../../components/Form/Chakra/Input";
 
 import PreviewUploader from "../../components/PreviewUploader";
+import Icon from "../../components/Chakra/Icon";
 
-import close from "../../assets/close.svg";
+import { ReactComponent as Close } from "../../assets/close.svg";
+
 import getMyFiles from "../../helpers/getMyFiles";
 import setMyFiles from "../../helpers/setMyFiles";
 
 const { ipcRenderer } = window.require("electron");
+
+type FormData = {
+  title: string;
+  file: any;
+  preview: any;
+  description: string;
+};
 
 const uploadFiles = async (info: FormData) => {
   const preview = {
@@ -28,22 +31,21 @@ const uploadFiles = async (info: FormData) => {
   };
 
   const file = {
+    title: info.title,
     name: info.file?.name,
     path: info.file?.path,
+    size: String(info.file?.size),
+    ext: info.file?.name.slice(
+      ((info.file?.name.lastIndexOf(".") - 1) >>> 0) + 2
+    ),
   };
   const data = await ipcRenderer.invoke("upload-file", {
     description: info.description,
     preview,
     file,
   });
-
+  console.log(data);
   return data;
-};
-
-type FormData = {
-  file: any;
-  preview: any;
-  description: string;
 };
 
 interface UploadProps {
@@ -54,7 +56,7 @@ function Upload({ onClose }: UploadProps) {
   // @ts-ignore
   const { mutateAsync: upload, isLoading } = useMutation<any>(uploadFiles);
 
-  const { register, handleSubmit, control, reset } = useForm();
+  const { register, handleSubmit, control, reset, errors } = useForm();
   const toast = useToast();
 
   const onSubmit = handleSubmit(async (values) => {
@@ -92,7 +94,7 @@ function Upload({ onClose }: UploadProps) {
         minWidth="40rem"
         position="relative"
         overflowY="auto"
-        maxHeight="90vh"
+        maxHeight="80vh"
       >
         <Button
           type="button"
@@ -103,15 +105,24 @@ function Upload({ onClose }: UploadProps) {
           right="2%"
           size="sm"
         >
-          <Image src={close} alt="close" width={25} />
+          <Icon icon={Close} width={25} />
         </Button>
         <Text fontSize="1.8rem" textAlign="center">
           Upload your file
         </Text>
         <Stack as="form" onSubmit={onSubmit} spacing="1rem">
+          <Input
+            name="title"
+            placeholder="File title"
+            formRef={register({
+              required: { value: true, message: "A title is required" },
+            })}
+            error={errors.title}
+          />
           <Controller
             name="file"
             control={control}
+            defaultValue=""
             render={({ onChange }) => (
               <Dropzone onDrop={(files) => onChange(files?.[0])} />
             )}
@@ -120,6 +131,7 @@ function Upload({ onClose }: UploadProps) {
           <Controller
             name="preview"
             control={control}
+            defaultValue=""
             render={({ onChange }) => (
               <PreviewUploader onDrop={(files) => onChange(files?.[0])} />
             )}
@@ -127,7 +139,9 @@ function Upload({ onClose }: UploadProps) {
           <Textarea
             name="description"
             placeholder="Description..."
-            ref={register}
+            ref={register({
+              required: { value: true, message: "A description is required" },
+            })}
           />
           <Button type="submit" colorScheme="blue" isLoading={isLoading}>
             Submit

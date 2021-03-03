@@ -1,13 +1,11 @@
+import React, { useState } from "react";
 import { Button, HStack, Stack, Text } from "@chakra-ui/react";
 import { AnimatePresence, AnimateSharedLayout, motion } from "framer-motion";
 import { useMutation } from "react-query";
 
-import React, { useState } from "react";
-
-import Download from "./Download";
 import Upload from "./Upload";
+import Download from "./Download";
 import Preview from "./Preview";
-import MyFiles from "./MyFiles";
 
 const { ipcRenderer } = window.require("electron");
 
@@ -15,7 +13,6 @@ const components = [
   { id: "Upload", component: Upload, color: "blue" },
   { id: "Download", component: Download, color: "green" },
   { id: "Preview", component: Preview, color: "purple" },
-  { id: "MyFiles", component: MyFiles, color: "yellow" },
 ];
 
 const ipfsConnect = async () => {
@@ -26,8 +23,10 @@ const ipfsConnect = async () => {
 function Home() {
   const [selectPage, setSelectPage] = useState("");
 
-  const Component: any = components.find((c) => c.id === selectPage)?.component;
+  const Component = components.find((c) => c.id === selectPage)?.component;
+
   const { mutateAsync: connect, data, isLoading } = useMutation(ipfsConnect);
+
   return (
     <AnimateSharedLayout>
       <Stack
@@ -51,11 +50,12 @@ function Home() {
           Connect
         </Button>
         {data && (
-          <Text maxWidth="500px">
+          <Text maxWidth="500px" maxHeight="300px" overflowY="auto">
             Connect response:{" "}
             {data.success ? JSON.stringify(data, null, 2) : String(data.error)}
           </Text>
         )}
+
         <HStack justifyContent="space-around">
           {components.map((c) => (
             <motion.div key={c.id} layoutId={c.id}>
@@ -73,9 +73,8 @@ function Home() {
       </Stack>
 
       <AnimatePresence>
-        {selectPage && (
-          <Component layoutId={selectPage} onClose={() => setSelectPage("")} />
-        )}
+        {/* @ts-ignore */}
+        {selectPage && <Component onClose={() => setSelectPage("")} />}
       </AnimatePresence>
     </AnimateSharedLayout>
   );

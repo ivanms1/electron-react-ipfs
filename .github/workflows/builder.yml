@@ -37,14 +37,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 15.x
-      - name: Choco help
-        uses: crazy-max/ghaction-chocolatey@v1
-        with:
-          args: -h
-      - run: |
-          choco install wixtoolset
-          ls
-          $env:PATH += ";C:\Program Files (x86)/WiX Toolset v3.11/bin"
+      - name: Install deps and package
+        run: |
           yarn install
           yarn make
       - name: Upload Executable

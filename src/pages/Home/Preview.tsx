@@ -1,18 +1,36 @@
 import React from "react";
-import { Button, Stack, Text, Image, Grid } from "@chakra-ui/react";
+import { Button, Stack, Text, Grid, Spinner } from "@chakra-ui/react";
+import { useQuery } from "react-query";
 import { motion } from "framer-motion";
 
 import PreviewImage from "./PreviewImage";
+import Icon from "../../components/Chakra/Icon";
+import FileProps from "../../types/File";
 
-import close from "../../assets/close.svg";
+import { ReactComponent as Close } from "../../assets/close.svg";
 
-import { previewImages } from "../../const";
+import axios from "axios";
 
 interface DownloadProps {
   onClose: () => void;
 }
 
 function Preview({ onClose }: DownloadProps) {
+  const { data: files, isLoading } = useQuery(
+    "get-preview-files",
+    async () => {
+      const { data } = await axios.get(
+        "http://192.168.100.96:8000/api/content/get_all"
+      );
+
+      return data;
+    },
+    {
+      refetchOnMount: true,
+    }
+  );
+
+  console.log("data", files);
   return (
     <motion.div layoutId="Preview">
       <Stack
@@ -35,15 +53,24 @@ function Preview({ onClose }: DownloadProps) {
           right="2%"
           size="sm"
         >
-          <Image src={close} alt="close" width={25} />
+          <Icon icon={Close} width={25} />
         </Button>
         <Text fontSize="1.8rem" textAlign="center">
           Preview Files
         </Text>
-        <Grid gridTemplateColumns="repeat(3, 1fr)" overflowY="auto" gap="1rem">
-          {previewImages.map((file) => (
-            <PreviewImage key={file.description.hash} file={file} />
-          ))}
+        <Grid
+          gridTemplateColumns="repeat(3, 1fr)"
+          overflowY="auto"
+          gap="1rem"
+          minHeight="60vh"
+        >
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            files.map((file: FileProps) => (
+              <PreviewImage key={file.id} file={file} />
+            ))
+          )}
         </Grid>
       </Stack>
     </motion.div>

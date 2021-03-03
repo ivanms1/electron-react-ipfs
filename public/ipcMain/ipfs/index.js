@@ -5,6 +5,7 @@ const Protector = require("libp2p/src/pnet");
 const all = require("it-all");
 const uint8ArrayConcat = require("uint8arrays/concat");
 const Jimp = require("jimp");
+const fetch = require("electron-fetch");
 
 let node;
 
@@ -27,11 +28,38 @@ ipcMain.handle("upload-file", async (_, info) => {
       content: fileContent,
     });
 
+    const body = {
+      title: info.file.title,
+      info: {
+        ccid: String(fileHash.cid),
+        desc: String(descriptionHash.cid),
+        txhash: "x0020202",
+        file_name: info.file.name,
+        ext: info.file.ext,
+        size: info.file.size,
+        thumbnail: String(previewHash.cid),
+      },
+      cate_id: 1,
+      user: {
+        wallet_id: "x0020202",
+      },
+    };
+
+    // upload to server
+    const res = await fetch.default(
+      "http://192.168.100.96:8000/api/content/register",
+      {
+        method: "POST",
+        body: JSON.stringify(body),
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    const data = await res.json();
+
     return {
       success: true,
-      description: { hash: String(descriptionHash.cid) },
-      preview: { hash: String(previewHash.cid), name: info.preview.name },
-      file: { hash: String(fileHash.cid), name: info.file.name },
+      ...data,
     };
   } catch (error) {
     return {
@@ -74,11 +102,9 @@ ipcMain.handle("download-file", async (_, hash) => {
 
 ipcMain.handle("get-image-preview", async (_, file) => {
   try {
-    const description = uint8ArrayConcat(
-      await all(node.cat(file.description.hash))
-    );
+    const description = uint8ArrayConcat(await all(node.cat(file.info.desc)));
 
-    const preview = uint8ArrayConcat(await all(node.cat(file.preview.hash)));
+    const preview = uint8ArrayConcat(await all(node.cat(file.info.thumbnail)));
 
     return {
       success: true,
