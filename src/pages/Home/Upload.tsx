@@ -44,7 +44,6 @@ const uploadFiles = async (info: FormData) => {
     preview,
     file,
   });
-  console.log(data);
   return data;
 };
 

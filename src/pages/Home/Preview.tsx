@@ -30,7 +30,6 @@ function Preview({ onClose }: DownloadProps) {
     }
   );
 
-  console.log("data", files);
   return (
     <motion.div layoutId="Preview">
       <Stack

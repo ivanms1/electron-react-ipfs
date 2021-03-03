@@ -2,7 +2,6 @@ import React from "react";
 import {
   Drawer as ChakraDrawer,
   DrawerBody,
-  DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
   DrawerContent,
