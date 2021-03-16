@@ -16,17 +16,19 @@ interface DownloadProps {
 }
 
 function Preview({ onClose }: DownloadProps) {
-  const { data: files, isLoading } = useQuery(
+  const { data, isLoading } = useQuery(
     "get-preview-files",
     async () => {
-      const { data } = await axios.get(
-        "http://192.168.100.96:8000/api/content/get_all"
-      );
+      const {
+        data: { data },
+      } = await axios.get("http://192.168.100.54:8000/api/content/get_all");
 
       return data;
     },
     {
       refetchOnMount: true,
+      cacheTime: 0,
+      staleTime: 0,
     }
   );
 
@@ -66,7 +68,7 @@ function Preview({ onClose }: DownloadProps) {
           {isLoading ? (
             <Spinner />
           ) : (
-            files.map((file: FileProps) => (
+            data?.map((file: FileProps) => (
               <PreviewImage key={file.id} file={file} />
             ))
           )}

@@ -70,8 +70,8 @@ function Upload({ onClose }: UploadProps) {
         duration: 3000,
         position: "top",
       });
-
       reset();
+      onClose();
     } else {
       toast({
         status: "error",

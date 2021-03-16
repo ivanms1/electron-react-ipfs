@@ -47,7 +47,7 @@ ipcMain.handle("upload-file", async (_, info) => {
 
     // upload to server
     const res = await fetch.default(
-      "http://192.168.100.96:8000/api/content/register",
+      "http://192.168.100.54:8000/api/content/register",
       {
         method: "POST",
         body: JSON.stringify(body),
